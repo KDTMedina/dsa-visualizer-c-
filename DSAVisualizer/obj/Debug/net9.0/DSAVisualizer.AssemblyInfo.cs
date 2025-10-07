@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DSAVisualizer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+751ae0433ef40c08e01fb8b00add7fd15e2d35e7")]
 [assembly: System.Reflection.AssemblyProductAttribute("DSAVisualizer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DSAVisualizer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

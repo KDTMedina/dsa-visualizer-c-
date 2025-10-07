@@ -36,12 +36,12 @@ namespace DSAVisualizer.Services
                     {
                         queue.Enqueue(neighbor);
                         visited.Add(neighbor);
-                        
-                        var edge = graph.Edges.First(e => 
-                            (e.Source == node && e.Target == neighbor) || 
+
+                        var edge = graph.Edges.First(e =>
+                            (e.Source == node && e.Target == neighbor) ||
                             (!e.IsDirected && e.Source == neighbor && e.Target == node));
-                        
-                        AddStep(visited.ToList(), new List<GraphEdge> { edge }, 
+
+                        AddStep(visited.ToList(), new List<GraphEdge> { edge },
                             $"Discovered node {neighbor} from {node}");
                     }
                 }
@@ -98,13 +98,13 @@ namespace DSAVisualizer.Services
             {
                 if (!visited.Contains(neighbor))
                 {
-                    var edge = graph.Edges.First(e => 
-                        (e.Source == node && e.Target == neighbor) || 
+                    var edge = graph.Edges.First(e =>
+                        (e.Source == node && e.Target == neighbor) ||
                         (!e.IsDirected && e.Source == neighbor && e.Target == node));
-                    
-                    AddStep(visited.ToList(), new List<GraphEdge> { edge }, 
+
+                    AddStep(visited.ToList(), new List<GraphEdge> { edge },
                         $"Exploring edge {node} -> {neighbor}");
-                    
+
                     DFSRecursive(graph, neighbor, visited, visitOrder);
                 }
             }
@@ -125,17 +125,17 @@ namespace DSAVisualizer.Services
             }
             distances[startNode] = 0;
 
-            AddStep(new List<string>(), new List<GraphEdge>(), 
+            AddStep(new List<string>(), new List<GraphEdge>(),
                 $"Starting Dijkstra's algorithm from {startNode} to {endNode}", distances);
 
             while (unvisited.Count > 0)
             {
                 var current = unvisited.OrderBy(n => distances[n]).First();
-                
+
                 if (distances[current] == int.MaxValue) break;
-                
+
                 unvisited.Remove(current);
-                AddStep(new List<string> { current }, new List<GraphEdge>(), 
+                AddStep(new List<string> { current }, new List<GraphEdge>(),
                     $"Processing node {current} with distance {distances[current]}", distances);
 
                 if (current == endNode) break;
@@ -147,17 +147,17 @@ namespace DSAVisualizer.Services
                 foreach (var edge in neighbors)
                 {
                     var neighbor = edge.Source == current ? edge.Target : edge.Source;
-                    
+
                     if (!unvisited.Contains(neighbor)) continue;
 
                     var alt = distances[current] + edge.Weight;
-                    
+
                     if (alt < distances[neighbor])
                     {
                         distances[neighbor] = alt;
                         previous[neighbor] = current;
-                        
-                        AddStep(new List<string> { current, neighbor }, new List<GraphEdge> { edge }, 
+
+                        AddStep(new List<string> { current, neighbor }, new List<GraphEdge> { edge },
                             $"Updated distance to {neighbor}: {alt}", distances);
                     }
                 }
@@ -176,7 +176,7 @@ namespace DSAVisualizer.Services
                 path.Insert(0, startNode);
             }
 
-            AddStep(path, new List<GraphEdge>(), 
+            AddStep(path, new List<GraphEdge>(),
                 $"Shortest path found! Distance: {distances[endNode]}", distances);
 
             return new GraphAlgorithmResponse
@@ -199,7 +199,7 @@ namespace DSAVisualizer.Services
             var visited = new HashSet<string> { startNode };
             var totalWeight = 0;
 
-            AddStep(new List<string> { startNode }, new List<GraphEdge>(), 
+            AddStep(new List<string> { startNode }, new List<GraphEdge>(),
                 $"Starting Prim's algorithm from {startNode}");
 
             while (visited.Count < graph.Nodes.Count)
@@ -209,7 +209,7 @@ namespace DSAVisualizer.Services
 
                 foreach (var node in visited)
                 {
-                    var edges = graph.Edges.Where(e => 
+                    var edges = graph.Edges.Where(e =>
                         (e.Source == node && !visited.Contains(e.Target)) ||
                         (!e.IsDirected && e.Target == node && !visited.Contains(e.Source)));
 
@@ -227,15 +227,15 @@ namespace DSAVisualizer.Services
 
                 mstEdges.Add(minEdge);
                 totalWeight += minEdge.Weight;
-                
+
                 var newNode = visited.Contains(minEdge.Source) ? minEdge.Target : minEdge.Source;
                 visited.Add(newNode);
 
-                AddStep(visited.ToList(), mstEdges, 
+                AddStep(visited.ToList(), mstEdges,
                     $"Added edge {minEdge.Source}-{minEdge.Target} (weight: {minEdge.Weight})");
             }
 
-            AddStep(visited.ToList(), mstEdges, 
+            AddStep(visited.ToList(), mstEdges,
                 $"MST Complete! Total weight: {totalWeight}");
 
             return new GraphAlgorithmResponse
@@ -302,7 +302,7 @@ namespace DSAVisualizer.Services
             AddStep(visited.ToList(), new List<GraphEdge>(), $"Added {node} to stack");
         }
 
-        private void AddStep(List<string> visitedNodes, List<GraphEdge> highlightedEdges, 
+        private void AddStep(List<string> visitedNodes, List<GraphEdge> highlightedEdges,
             string description, Dictionary<string, int>? distances = null)
         {
             _steps.Add(new GraphAlgorithmStep
@@ -313,6 +313,6 @@ namespace DSAVisualizer.Services
                 Description = description,
                 NodeDistances = distances != null ? new Dictionary<string, int>(distances) : new()
             });
-        }
+        } 
     }
 }
