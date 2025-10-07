@@ -1,0 +1,23 @@
+# .NET / C# ignores
+bin/
+obj/
+*.user
+*.suo
+*.cache
+.vs/
+.vscode/
+
+# React / Node ignores
+client-app/node_modules/
+client-app/build/
+client-app/.env.local
+client-app/.env.development.local
+client-app/.env.test.local
+client-app/.env.production.local
+client-app/npm-debug.log*
+client-app/yarn-debug.log*
+client-app/yarn-error.log*
+
+# OS ignores
+.DS_Store
+Thumbs.db
