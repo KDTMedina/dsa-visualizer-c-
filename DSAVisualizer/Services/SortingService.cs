@@ -150,7 +150,7 @@ namespace DSAVisualizer.Services
             AddStep(arr, "Initial array", new List<int>());
             MergeSortRecursive(arr, 0, arr.Count - 1);
             AddStep(arr, "Array sorted!", new List<int>(), "green");
-            
+
             sw.Stop();
 
             return new AlgorithmResponse
@@ -168,9 +168,9 @@ namespace DSAVisualizer.Services
             if (left < right)
             {
                 int mid = left + (right - left) / 2;
-                
+
                 AddStep(arr, $"Dividing array from {left} to {right}", Enumerable.Range(left, right - left + 1).ToList(), "blue");
-                
+
                 MergeSortRecursive(arr, left, mid);
                 MergeSortRecursive(arr, mid + 1, right);
                 Merge(arr, left, mid, right);
@@ -229,7 +229,7 @@ namespace DSAVisualizer.Services
             AddStep(arr, "Initial array", new List<int>());
             QuickSortRecursive(arr, 0, arr.Count - 1);
             AddStep(arr, "Array sorted!", new List<int>(), "green");
-            
+
             sw.Stop();
 
             return new AlgorithmResponse
@@ -256,14 +256,14 @@ namespace DSAVisualizer.Services
         {
             int pivot = arr[high];
             AddStep(arr, $"Pivot selected: {pivot}", new List<int> { high }, "purple");
-            
+
             int i = low - 1;
 
             for (int j = low; j < high; j++)
             {
                 _comparisons++;
                 AddStep(arr, $"Comparing {arr[j]} with pivot {pivot}", new List<int> { j, high });
-                
+
                 if (arr[j] < pivot)
                 {
                     i++;
@@ -276,7 +276,7 @@ namespace DSAVisualizer.Services
             (arr[i + 1], arr[high]) = (arr[high], arr[i + 1]);
             _swaps++;
             AddStep(arr, $"Placed pivot at position {i + 1}", new List<int> { i + 1 }, "green");
-            
+
             return i + 1;
         }
 
@@ -303,7 +303,7 @@ namespace DSAVisualizer.Services
                 (arr[0], arr[i]) = (arr[i], arr[0]);
                 _swaps++;
                 AddStep(arr, $"Moved max element {arr[i]} to position {i}", new List<int> { 0, i }, "red");
-                
+
                 Heapify(arr, i, 0);
             }
 
@@ -359,6 +359,224 @@ namespace DSAVisualizer.Services
                 HighlightIndices = highlightIndices,
                 HighlightColor = color
             });
+        }
+
+        public AlgorithmResponse CountingSort(List<int> array)
+        {
+            _steps = new();
+            _comparisons = 0;
+            _swaps = 0;
+            var arr = new List<int>(array);
+            var sw = Stopwatch.StartNew();
+
+            AddStep(arr, "Initial array", new List<int>());
+
+            if (arr.Count == 0) return new AlgorithmResponse { Steps = _steps };
+
+            int max = arr.Max();
+            int min = arr.Min();
+            int range = max - min + 1;
+            var count = new int[range];
+            var output = new int[arr.Count];
+
+            // Count occurrences
+            for (int i = 0; i < arr.Count; i++)
+            {
+                count[arr[i] - min]++;
+                AddStep(arr, $"Counting {arr[i]}", new List<int> { i });
+            }
+
+            // Modify count array
+            for (int i = 1; i < count.Length; i++)
+            {
+                count[i] += count[i - 1];
+            }
+
+            // Build output array
+            for (int i = arr.Count - 1; i >= 0; i--)
+            {
+                output[count[arr[i] - min] - 1] = arr[i];
+                count[arr[i] - min]--;
+                var currentOutput = output.Take(arr.Count).ToList();
+                AddStep(currentOutput, $"Placing {arr[i]} in output", new List<int>());
+            }
+
+            var result = output.ToList();
+            AddStep(result, "Array sorted!", new List<int>(), "green");
+            sw.Stop();
+
+            return new AlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Counting Sort",
+                Comparisons = _comparisons,
+                Swaps = 0,
+                ExecutionTimeMs = sw.ElapsedMilliseconds
+            };
+        }
+
+        public AlgorithmResponse BucketSort(List<int> array)
+        {
+            _steps = new();
+            _comparisons = 0;
+            _swaps = 0;
+            var arr = new List<int>(array);
+            var sw = Stopwatch.StartNew();
+
+            AddStep(arr, "Initial array", new List<int>());
+
+            if (arr.Count == 0) return new AlgorithmResponse { Steps = _steps };
+
+            int max = arr.Max();
+            int min = arr.Min();
+            int bucketCount = 5;
+            var buckets = new List<List<int>>();
+
+            for (int i = 0; i < bucketCount; i++)
+            {
+                buckets.Add(new List<int>());
+            }
+
+            // Distribute elements into buckets
+            for (int i = 0; i < arr.Count; i++)
+            {
+                int bucketIndex = (arr[i] - min) * bucketCount / (max - min + 1);
+                if (bucketIndex >= bucketCount) bucketIndex = bucketCount - 1;
+                buckets[bucketIndex].Add(arr[i]);
+                AddStep(arr, $"Adding {arr[i]} to bucket {bucketIndex}", new List<int> { i });
+            }
+
+            // Sort individual buckets and concatenate
+            var sortedArr = new List<int>();
+            for (int i = 0; i < bucketCount; i++)
+            {
+                buckets[i].Sort();
+                _comparisons += buckets[i].Count;
+                sortedArr.AddRange(buckets[i]);
+                AddStep(sortedArr, $"Sorted bucket {i} and added to result", new List<int>());
+            }
+
+            AddStep(sortedArr, "Array sorted!", new List<int>(), "green");
+            sw.Stop();
+
+            return new AlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Bucket Sort",
+                Comparisons = _comparisons,
+                Swaps = 0,
+                ExecutionTimeMs = sw.ElapsedMilliseconds
+            };
+        }
+
+        public AlgorithmResponse RadixSort(List<int> array)
+        {
+            _steps = new();
+            _comparisons = 0;
+            _swaps = 0;
+            var arr = new List<int>(array);
+            var sw = Stopwatch.StartNew();
+
+            AddStep(arr, "Initial array", new List<int>());
+
+            if (arr.Count == 0) return new AlgorithmResponse { Steps = _steps };
+
+            int max = arr.Max();
+
+            for (int exp = 1; max / exp > 0; exp *= 10)
+            {
+                CountingSortByDigit(arr, exp);
+            }
+
+            AddStep(arr, "Array sorted!", new List<int>(), "green");
+            sw.Stop();
+
+            return new AlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Radix Sort",
+                Comparisons = _comparisons,
+                Swaps = 0,
+                ExecutionTimeMs = sw.ElapsedMilliseconds
+            };
+        }
+
+        private void CountingSortByDigit(List<int> arr, int exp)
+        {
+            var output = new int[arr.Count];
+            var count = new int[10];
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                count[(arr[i] / exp) % 10]++;
+            }
+
+            for (int i = 1; i < 10; i++)
+            {
+                count[i] += count[i - 1];
+            }
+
+            for (int i = arr.Count - 1; i >= 0; i--)
+            {
+                output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+                count[(arr[i] / exp) % 10]--;
+            }
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                arr[i] = output[i];
+            }
+
+            AddStep(arr, $"Sorted by digit at position {exp}", new List<int>());
+        }
+
+        public AlgorithmResponse ShellSort(List<int> array)
+        {
+            _steps = new();
+            _comparisons = 0;
+            _swaps = 0;
+            var arr = new List<int>(array);
+            var sw = Stopwatch.StartNew();
+
+            AddStep(arr, "Initial array", new List<int>());
+
+            int n = arr.Count;
+            for (int gap = n / 2; gap > 0; gap /= 2)
+            {
+                AddStep(arr, $"Current gap: {gap}", new List<int>());
+
+                for (int i = gap; i < n; i++)
+                {
+                    int temp = arr[i];
+                    int j;
+
+                    for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
+                    {
+                        _comparisons++;
+                        arr[j] = arr[j - gap];
+                        _swaps++;
+                        AddStep(arr, $"Comparing elements at distance {gap}", new List<int> { j, j - gap });
+                    }
+
+                    arr[j] = temp;
+                    if (j != i)
+                    {
+                        AddStep(arr, $"Inserted {temp} at position {j}", new List<int> { j }, "green");
+                    }
+                }
+            }
+
+            AddStep(arr, "Array sorted!", new List<int>(), "green");
+            sw.Stop();
+
+            return new AlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Shell Sort",
+                Comparisons = _comparisons,
+                Swaps = _swaps,
+                ExecutionTimeMs = sw.ElapsedMilliseconds
+            };
         }
     }
 }

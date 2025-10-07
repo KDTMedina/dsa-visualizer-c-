@@ -24,7 +24,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// for HTTP-only development
+// app.UseHttpsRedirection();
+
 app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();

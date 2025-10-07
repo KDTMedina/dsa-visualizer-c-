@@ -313,6 +313,314 @@ namespace DSAVisualizer.Services
                 Description = description,
                 NodeDistances = distances != null ? new Dictionary<string, int>(distances) : new()
             });
-        } 
+        }
+
+        public GraphAlgorithmResponse KruskalMST(Graph graph)
+        {
+            _steps = new();
+            var mstEdges = new List<GraphEdge>();
+            var parent = new Dictionary<string, string>();
+            var rank = new Dictionary<string, int>();
+            var totalWeight = 0;
+
+            // Initialize union-find
+            foreach (var node in graph.Nodes)
+            {
+                parent[node.Id] = node.Id;
+                rank[node.Id] = 0;
+            }
+
+            AddStep(new List<string>(), new List<GraphEdge>(), "Starting Kruskal's algorithm");
+
+            // Sort edges by weight
+            var sortedEdges = graph.Edges.OrderBy(e => e.Weight).ToList();
+
+            foreach (var edge in sortedEdges)
+            {
+                string rootSource = Find(parent, edge.Source);
+                string rootTarget = Find(parent, edge.Target);
+
+                AddStep(new List<string> { edge.Source, edge.Target }, new List<GraphEdge> { edge },
+                    $"Checking edge {edge.Source}-{edge.Target} (weight: {edge.Weight})");
+
+                if (rootSource != rootTarget)
+                {
+                    mstEdges.Add(edge);
+                    totalWeight += edge.Weight;
+                    Union(parent, rank, rootSource, rootTarget);
+
+                    AddStep(graph.Nodes.Select(n => n.Id).ToList(), mstEdges,
+                        $"Added edge {edge.Source}-{edge.Target} to MST");
+                }
+                else
+                {
+                    AddStep(new List<string>(), mstEdges,
+                        $"Skipped edge {edge.Source}-{edge.Target} (would create cycle)");
+                }
+            }
+
+            AddStep(graph.Nodes.Select(n => n.Id).ToList(), mstEdges,
+                $"Kruskal's MST Complete! Total weight: {totalWeight}");
+
+            return new GraphAlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Kruskal's Minimum Spanning Tree",
+                Result = new Dictionary<string, object>
+        {
+            { "MSTEdges", mstEdges },
+            { "TotalWeight", totalWeight }
+        }
+            };
+        }
+
+        private string Find(Dictionary<string, string> parent, string node)
+        {
+            if (parent[node] != node)
+            {
+                parent[node] = Find(parent, parent[node]);
+            }
+            return parent[node];
+        }
+
+        private void Union(Dictionary<string, string> parent, Dictionary<string, int> rank,
+            string root1, string root2)
+        {
+            if (rank[root1] < rank[root2])
+            {
+                parent[root1] = root2;
+            }
+            else if (rank[root1] > rank[root2])
+            {
+                parent[root2] = root1;
+            }
+            else
+            {
+                parent[root2] = root1;
+                rank[root1]++;
+            }
+        }
+
+        public GraphAlgorithmResponse FloydWarshall(Graph graph)
+        {
+            _steps = new();
+            var nodes = graph.Nodes.Select(n => n.Id).ToList();
+            var dist = new Dictionary<string, Dictionary<string, int>>();
+
+            // Initialize distances
+            foreach (var node1 in nodes)
+            {
+                dist[node1] = new Dictionary<string, int>();
+                foreach (var node2 in nodes)
+                {
+                    if (node1 == node2)
+                        dist[node1][node2] = 0;
+                    else
+                        dist[node1][node2] = int.MaxValue / 2;
+                }
+            }
+
+            // Set edge weights
+            foreach (var edge in graph.Edges)
+            {
+                dist[edge.Source][edge.Target] = edge.Weight;
+                if (!edge.IsDirected)
+                {
+                    dist[edge.Target][edge.Source] = edge.Weight;
+                }
+            }
+
+            AddStep(new List<string>(), new List<GraphEdge>(),
+                "Starting Floyd-Warshall algorithm", ConvertToSingleDict(dist, nodes));
+
+            // Floyd-Warshall algorithm
+            foreach (var k in nodes)
+            {
+                foreach (var i in nodes)
+                {
+                    foreach (var j in nodes)
+                    {
+                        if (dist[i][k] != int.MaxValue / 2 && dist[k][j] != int.MaxValue / 2)
+                        {
+                            if (dist[i][j] > dist[i][k] + dist[k][j])
+                            {
+                                dist[i][j] = dist[i][k] + dist[k][j];
+
+                                AddStep(new List<string> { i, k, j }, new List<GraphEdge>(),
+                                    $"Updated distance from {i} to {j} via {k}: {dist[i][j]}",
+                                    ConvertToSingleDict(dist, nodes));
+                            }
+                        }
+                    }
+                }
+            }
+
+            AddStep(nodes, new List<GraphEdge>(), "Floyd-Warshall Complete!",
+                ConvertToSingleDict(dist, nodes));
+
+            return new GraphAlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Floyd-Warshall All Pairs Shortest Paths",
+                Result = new Dictionary<string, object>
+        {
+            { "AllPairsDistances", dist }
+        }
+            };
+        }
+
+        private Dictionary<string, int> ConvertToSingleDict(
+            Dictionary<string, Dictionary<string, int>> dist, List<string> nodes)
+        {
+            var result = new Dictionary<string, int>();
+            foreach (var node in nodes)
+            {
+                if (dist.ContainsKey(node))
+                {
+                    foreach (var kvp in dist[node])
+                    {
+                        if (kvp.Value != int.MaxValue / 2)
+                        {
+                            result[$"{node}->{kvp.Key}"] = kvp.Value;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        public GraphAlgorithmResponse ConnectedComponents(Graph graph)
+        {
+            _steps = new();
+            var visited = new HashSet<string>();
+            var components = new List<List<string>>();
+            var componentId = 0;
+
+            AddStep(new List<string>(), new List<GraphEdge>(),
+                "Finding connected components");
+
+            foreach (var node in graph.Nodes)
+            {
+                if (!visited.Contains(node.Id))
+                {
+                    var component = new List<string>();
+                    DFSComponent(graph, node.Id, visited, component);
+                    components.Add(component);
+
+                    AddStep(visited.ToList(), new List<GraphEdge>(),
+                        $"Found component {componentId + 1}: {string.Join(", ", component)}");
+                    componentId++;
+                }
+            }
+
+            AddStep(visited.ToList(), new List<GraphEdge>(),
+                $"Total components found: {components.Count}");
+
+            return new GraphAlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Connected Components",
+                Result = new Dictionary<string, object>
+        {
+            { "Components", components },
+            { "ComponentCount", components.Count }
+        }
+            };
+        }
+
+        private void DFSComponent(Graph graph, string node, HashSet<string> visited, List<string> component)
+        {
+            visited.Add(node);
+            component.Add(node);
+
+            var neighbors = graph.Edges
+                .Where(e => e.Source == node || (!e.IsDirected && e.Target == node))
+                .Select(e => e.Source == node ? e.Target : e.Source)
+                .ToList();
+
+            foreach (var neighbor in neighbors)
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    DFSComponent(graph, neighbor, visited, component);
+                }
+            }
+        }
+
+        public GraphAlgorithmResponse TopologicalSortIndegree(Graph graph)
+        {
+            _steps = new();
+            var indegree = new Dictionary<string, int>();
+            var result = new List<string>();
+
+            // Initialize indegree
+            foreach (var node in graph.Nodes)
+            {
+                indegree[node.Id] = 0;
+            }
+
+            // Calculate indegree
+            foreach (var edge in graph.Edges)
+            {
+                if (edge.IsDirected)
+                {
+                    indegree[edge.Target]++;
+                }
+            }
+
+            AddStep(new List<string>(), new List<GraphEdge>(),
+                "Starting Topological Sort (Indegree method)", indegree);
+
+            var queue = new Queue<string>();
+            foreach (var node in indegree.Where(kvp => kvp.Value == 0))
+            {
+                queue.Enqueue(node.Key);
+            }
+
+            while (queue.Count > 0)
+            {
+                var node = queue.Dequeue();
+                result.Add(node);
+
+                AddStep(result, new List<GraphEdge>(),
+                    $"Processed node {node}", indegree);
+
+                var neighbors = graph.Edges
+                    .Where(e => e.Source == node && e.IsDirected)
+                    .Select(e => e.Target)
+                    .ToList();
+
+                foreach (var neighbor in neighbors)
+                {
+                    indegree[neighbor]--;
+                    if (indegree[neighbor] == 0)
+                    {
+                        queue.Enqueue(neighbor);
+                    }
+                }
+            }
+
+            if (result.Count != graph.Nodes.Count)
+            {
+                AddStep(result, new List<GraphEdge>(),
+                    "Graph has a cycle! Topological sort not possible.");
+            }
+            else
+            {
+                AddStep(result, new List<GraphEdge>(),
+                    $"Topological order: {string.Join(" → ", result)}");
+            }
+
+            return new GraphAlgorithmResponse
+            {
+                Steps = _steps,
+                AlgorithmName = "Topological Sort (Indegree)",
+                Result = new Dictionary<string, object>
+        {
+            { "TopologicalOrder", result },
+            { "HasCycle", result.Count != graph.Nodes.Count }
+        }
+            };
+        }
     }
 }
