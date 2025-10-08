@@ -1,27 +1,27 @@
 .bars-container {
   display: flex;
-  justify-content: center; /* Align bars horizontally */
-  align-items: flex-end; /* Align bars at the bottom */
-  gap: 8px; /* Add some space between bars */
+  justify-content: center; 
+  align-items: flex-end; 
+  gap: 8px;
   padding: 10px;
-  height: 400px; /* Set the container height */
-  overflow-x: auto; /* Horizontal scrollbar if needed */
+  height: 400px;
+  overflow-x: auto; 
 }
 
 .bar-container {
   display: flex;
-  flex-direction: column; /* Stack the bar and value vertically */
-  align-items: center; /* Center the bar and value horizontally */
+  flex-direction: column;
+  align-items: center; 
 }
 
 .bar {
   background-color: #3498db;
-  width: 100%; /* Ensure the bar takes up the full width of the container */
+  width: 100%;
   border-radius: 5px;
 }
 
 .bar-value {
-  margin-top: 8px; /* Space between the bar and the value */
+  margin-top: 8px;
   font-size: 12px;
   color: #ffffff;
 }
