@@ -37,7 +37,11 @@ function GraphVisualizer() {
     { value: 'dfs', label: 'Depth-First Search', needsEnd: false },
     { value: 'dijkstra', label: "Dijkstra's Shortest Path", needsEnd: true },
     { value: 'prim', label: "Prim's MST", needsEnd: false },
-    { value: 'topological-dfs', label: 'Topological Sort (DFS)', needsEnd: false }
+    { value: 'kruskal', label: "Kruskal's MST", needsEnd: false },
+    { value: 'topological-dfs', label: 'Topological Sort (DFS)', needsEnd: false },
+    { value: 'topological-indegree', label: 'Topological Sort (Indegree)', needsEnd: false },
+    { value: 'floyd-warshall', label: 'Floyd-Warshall (All Pairs)', needsEnd: false },
+    { value: 'connected-components', label: 'Connected Components', needsEnd: false }
   ];
 
   useEffect(() => {

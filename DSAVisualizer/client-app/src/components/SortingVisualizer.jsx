@@ -53,7 +53,7 @@ function SortingVisualizer() {
     try {
       setIsPlaying(false);
       setCurrentStep(0);
-      
+
       const response = await axios.post(`/api/sorting/${algorithm}`, {
         array: array
       });
@@ -98,7 +98,7 @@ function SortingVisualizer() {
 
   const getBarColor = (index) => {
     if (steps.length === 0) return '#3498db';
-    
+
     const step = steps[currentStep];
     if (step.highlightIndices.includes(index)) {
       return step.highlightColor;
@@ -113,7 +113,7 @@ function SortingVisualizer() {
     <div className="sorting-visualizer">
       <div className="controls-panel">
         <h2>Sorting Algorithm Visualizer</h2>
-        
+
         <div className="control-group">
           <label>Select Algorithm:</label>
           <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
@@ -193,19 +193,20 @@ function SortingVisualizer() {
       <div className="visualization-panel">
         <div className="bars-container">
           {currentArray.map((value, index) => (
-            <div
-              key={index}
-              className="bar"
-              style={{
-                height: `${(value / maxValue) * 400}px`,
-                backgroundColor: getBarColor(index),
-                width: `${Math.min(60, 600 / currentArray.length)}px`
-              }}
-            >
+            <div key={index} className="bar-container">
+              <div
+                className="bar"
+                style={{
+                  height: `${(value / maxValue) * 400}px`,
+                  backgroundColor: getBarColor(index),
+                  width: `${Math.min(60, 600 / currentArray.length)}px`
+                }}
+              />
               <span className="bar-value">{value}</span>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
