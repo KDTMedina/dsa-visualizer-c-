@@ -27,6 +27,21 @@ function App() {
             <Route path="/graphs" element={<GraphVisualizer />} />
           </Routes>
         </div>
+
+        <footer className="footer">
+          <div className="footer-content">
+            <p>{new Date().getFullYear()} © KD Medina</p>
+            <div className="footer-links">
+              <a href="https://github.com/KDTMedina" target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+              <a href="https://linkedin.com/in/kdtmedina" target="_blank" rel="noopener noreferrer">
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </footer>
+
       </div>
     </Router>
   );
