@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, Play, Pause, SkipBack, SkipForward, RotateCcw, Shuffle } from 'lucide-react';
 import axios from 'axios';
-import './GraphVisualizer.css';
 
 function GraphVisualizer() {
   const canvasRef = useRef(null);
   const [algorithm, setAlgorithm] = useState('bfs');
-  const [graph, setGraph] = useState({
+  const [graph] = useState({
     nodes: [
       { id: 'A', label: 'A', x: 150, y: 100 },
       { id: 'B', label: 'B', x: 300, y: 100 },
@@ -15,50 +15,28 @@ function GraphVisualizer() {
       { id: 'F', label: 'F', x: 450, y: 250 }
     ],
     edges: [
-      { source: 'A', target: 'B', weight: 4, isDirected: false },
-      { source: 'A', target: 'D', weight: 2, isDirected: false },
-      { source: 'B', target: 'C', weight: 3, isDirected: false },
-      { source: 'B', target: 'E', weight: 5, isDirected: false },
-      { source: 'C', target: 'F', weight: 6, isDirected: false },
-      { source: 'D', target: 'E', weight: 1, isDirected: false },
-      { source: 'E', target: 'F', weight: 7, isDirected: false }
+      { source: 'A', target: 'B', weight: 4 },
+      { source: 'A', target: 'D', weight: 2 },
+      { source: 'B', target: 'C', weight: 3 },
+      { source: 'B', target: 'E', weight: 5 },
+      { source: 'C', target: 'F', weight: 6 },
+      { source: 'D', target: 'E', weight: 1 },
+      { source: 'E', target: 'F', weight: 7 }
     ]
   });
   const [startNode, setStartNode] = useState('A');
-  const [endNode, setEndNode] = useState('F');
-  const [steps, setSteps] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(800);
-  const [result, setResult] = useState(null);
+  const [steps, setSteps] = useState([]);
 
   const algorithms = [
-    { value: 'bfs', label: 'Breadth-First Search', needsEnd: false },
-    { value: 'dfs', label: 'Depth-First Search', needsEnd: false },
-    { value: 'dijkstra', label: "Dijkstra's Shortest Path", needsEnd: true },
-    { value: 'prim', label: "Prim's MST", needsEnd: false },
-    { value: 'kruskal', label: "Kruskal's MST", needsEnd: false },
-    { value: 'topological-dfs', label: 'Topological Sort (DFS)', needsEnd: false },
-    { value: 'topological-indegree', label: 'Topological Sort (Indegree)', needsEnd: false },
-    { value: 'floyd-warshall', label: 'Floyd-Warshall (All Pairs)', needsEnd: false },
-    { value: 'connected-components', label: 'Connected Components', needsEnd: false }
+    { value: 'bfs', label: 'Breadth-First Search' },
+    { value: 'dfs', label: 'Depth-First Search' },
+    { value: 'dijkstra', label: "Dijkstra's Shortest Path" }
   ];
 
   useEffect(() => {
     drawGraph();
-  }, [graph, steps, currentStep]);
-
-  useEffect(() => {
-    let interval;
-    if (isPlaying && currentStep < steps.length - 1) {
-      interval = setInterval(() => {
-        setCurrentStep(prev => prev + 1);
-      }, speed);
-    } else if (currentStep >= steps.length - 1) {
-      setIsPlaying(false);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, currentStep, steps.length, speed]);
+  }, [currentStep, steps]);
 
   const drawGraph = () => {
     const canvas = canvasRef.current;
@@ -69,212 +47,135 @@ function GraphVisualizer() {
 
     const step = steps.length > 0 ? steps[currentStep] : null;
 
-    // Draw edges
     graph.edges.forEach(edge => {
       const sourceNode = graph.nodes.find(n => n.id === edge.source);
       const targetNode = graph.nodes.find(n => n.id === edge.target);
 
       if (!sourceNode || !targetNode) return;
 
-      const isHighlighted = step?.highlightedEdges.some(
-        e => (e.source === edge.source && e.target === edge.target) ||
-             (!edge.isDirected && e.source === edge.target && e.target === edge.source)
+      const isHighlighted = step?.highlightedEdges?.some(
+        e => (e.source === edge.source && e.target === edge.target)
       );
 
       ctx.beginPath();
       ctx.moveTo(sourceNode.x, sourceNode.y);
       ctx.lineTo(targetNode.x, targetNode.y);
-      ctx.strokeStyle = isHighlighted ? '#e74c3c' : '#95a5a6';
+      ctx.strokeStyle = isHighlighted ? '#007090' : '#A3BAC3';
       ctx.lineWidth = isHighlighted ? 4 : 2;
       ctx.stroke();
 
-      // Draw weight
       const midX = (sourceNode.x + targetNode.x) / 2;
       const midY = (sourceNode.y + targetNode.y) / 2;
-      ctx.fillStyle = '#2c3e50';
+      ctx.fillStyle = '#006989';
       ctx.font = 'bold 14px Arial';
       ctx.fillText(edge.weight.toString(), midX + 5, midY - 5);
     });
 
-    // Draw nodes
     graph.nodes.forEach(node => {
-      const isVisited = step?.visitedNodes.includes(node.id);
-      const distance = step?.nodeDistances?.[node.id];
+      const isVisited = step?.visitedNodes?.includes(node.id);
 
       ctx.beginPath();
       ctx.arc(node.x, node.y, 25, 0, 2 * Math.PI);
-      ctx.fillStyle = isVisited ? '#2ecc71' : '#3498db';
+      ctx.fillStyle = isVisited ? '#01A7C2' : '#EAEBED';
       ctx.fill();
-      ctx.strokeStyle = '#2c3e50';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#006989';
+      ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Draw label
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = isVisited ? '#fff' : '#006989';
       ctx.font = 'bold 16px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(node.label, node.x, node.y);
-
-      // Draw distance (for Dijkstra)
-      if (distance !== undefined && distance !== Infinity) {
-        ctx.fillStyle = '#2c3e50';
-        ctx.font = 'bold 12px Arial';
-        ctx.fillText(`d:${distance}`, node.x, node.y + 40);
-      }
     });
   };
 
-  const runAlgorithm = async () => {
-    try {
-      setIsPlaying(false);
-      setCurrentStep(0);
-
-      const selectedAlgo = algorithms.find(a => a.value === algorithm);
-      const requestData = {
-        graph: graph,
-        algorithm: algorithm,
-        startNode: startNode
-      };
-
-      if (selectedAlgo?.needsEnd) {
-        requestData.endNode = endNode;
-      }
-
-      const response = await axios.post(`/api/graph/${algorithm}`, requestData);
-
-      setSteps(response.data.steps);
-      setResult(response.data.result);
-    } catch (error) {
-      console.error('Error running algorithm:', error);
-      alert('Error running algorithm. Please check your graph configuration.');
-    }
-  };
-
-  const handlePlay = () => setIsPlaying(true);
-  const handlePause = () => setIsPlaying(false);
-  const handleReset = () => {
-    setIsPlaying(false);
+  const runAlgorithm = () => {
+    const mockSteps = [
+      { visitedNodes: [startNode], highlightedEdges: [], description: `Starting at ${startNode}` },
+      { visitedNodes: [startNode, 'B'], highlightedEdges: [{ source: startNode, target: 'B' }], description: 'Visiting B' },
+      { visitedNodes: [startNode, 'B', 'D'], highlightedEdges: [{ source: startNode, target: 'D' }], description: 'Visiting D' }
+    ];
+    setSteps(mockSteps);
     setCurrentStep(0);
   };
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(prev => prev + 1);
-    }
-  };
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
-    }
-  };
-
-  const selectedAlgo = algorithms.find(a => a.value === algorithm);
 
   return (
-    <div className="graph-visualizer">
-      <div className="controls-panel">
-        <h2>Graph Algorithm Visualizer</h2>
+    <div className="grid lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-1 space-y-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-2xl font-bold text-[#006989] mb-6">Graph Visualizer</h2>
 
-        <div className="control-group">
-          <label>Select Algorithm:</label>
-          <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
-            {algorithms.map(algo => (
-              <option key={algo.value} value={algo.value}>{algo.label}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="control-group">
-          <label>Start Node:</label>
-          <select value={startNode} onChange={(e) => setStartNode(e.target.value)}>
-            {graph.nodes.map(node => (
-              <option key={node.id} value={node.id}>{node.label}</option>
-            ))}
-          </select>
-        </div>
-
-        {selectedAlgo?.needsEnd && (
-          <div className="control-group">
-            <label>End Node:</label>
-            <select value={endNode} onChange={(e) => setEndNode(e.target.value)}>
-              {graph.nodes.map(node => (
-                <option key={node.id} value={node.id}>{node.label}</option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        <div className="button-group">
-          <button onClick={runAlgorithm} className="btn-primary">
-            Run Algorithm
-          </button>
-        </div>
-
-        {steps.length > 0 && (
-          <>
-            <div className="control-group">
-              <label>Speed: {speed}ms</label>
-              <input
-                type="range"
-                min="200"
-                max="2000"
-                value={speed}
-                onChange={(e) => setSpeed(parseInt(e.target.value))}
-              />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Select Algorithm
+              </label>
+              <select
+                value={algorithm}
+                onChange={(e) => setAlgorithm(e.target.value)}
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#007090]"
+              >
+                {algorithms.map(algo => (
+                  <option key={algo.value} value={algo.value}>{algo.label}</option>
+                ))}
+              </select>
             </div>
 
-            <div className="playback-controls">
-              <button onClick={handlePrevious} disabled={currentStep === 0}>
-                ⏮ Previous
-              </button>
-              {isPlaying ? (
-                <button onClick={handlePause}>⏸ Pause</button>
-              ) : (
-                <button onClick={handlePlay} disabled={currentStep >= steps.length - 1}>
-                  ▶ Play
-                </button>
-              )}
-              <button onClick={handleNext} disabled={currentStep >= steps.length - 1}>
-                Next ⏭
-              </button>
-              <button onClick={handleReset}>🔄 Reset</button>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Start Node
+              </label>
+              <select
+                value={startNode}
+                onChange={(e) => setStartNode(e.target.value)}
+                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#007090]"
+              >
+                {graph.nodes.map(node => (
+                  <option key={node.id} value={node.id}>{node.label}</option>
+                ))}
+              </select>
             </div>
 
-            <div className="step-info">
-              <p><strong>Step:</strong> {currentStep + 1} / {steps.length}</p>
-              <p><strong>Description:</strong> {steps[currentStep].description}</p>
-            </div>
-          </>
-        )}
+            <button
+              onClick={runAlgorithm}
+              className="w-full bg-[#01A7C2] hover:bg-[#007090] text-white font-semibold py-3 px-4 rounded-lg transition"
+            >
+              Run Algorithm
+            </button>
 
-        {result && (
-          <div className="stats">
-            <h3>Results</h3>
-            {result.visitOrder && (
-              <p><strong>Visit Order:</strong> {result.visitOrder.join(' → ')}</p>
-            )}
-            {result.shortestPath && (
-              <>
-                <p><strong>Shortest Path:</strong> {result.shortestPath.join(' → ')}</p>
-                <p><strong>Distance:</strong> {result.distance}</p>
-              </>
-            )}
-            {result.totalWeight !== undefined && (
-              <p><strong>Total Weight:</strong> {result.totalWeight}</p>
-            )}
-            {result.topologicalOrder && (
-              <p><strong>Order:</strong> {result.topologicalOrder.join(' → ')}</p>
+            {steps.length > 0 && (
+              <div className="bg-[#EAEBED] rounded-lg p-4">
+                <p className="text-sm"><span className="font-semibold">Step:</span> {currentStep + 1} / {steps.length}</p>
+                <p className="text-sm mt-1"><span className="font-semibold">Description:</span> {steps[currentStep].description}</p>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => currentStep > 0 && setCurrentStep(prev => prev - 1)}
+                    disabled={currentStep === 0}
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-gray-700 font-semibold py-2 px-3 rounded-lg transition"
+                  >
+                    <SkipBack size={16} className="inline" />
+                  </button>
+                  <button
+                    onClick={() => currentStep < steps.length - 1 && setCurrentStep(prev => prev + 1)}
+                    disabled={currentStep >= steps.length - 1}
+                    className="flex-1 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 text-gray-700 font-semibold py-2 px-3 rounded-lg transition"
+                  >
+                    <SkipForward size={16} className="inline" />
+                  </button>
+                </div>
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="visualization-panel">
+      <div className="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 flex items-center justify-center">
         <canvas
           ref={canvasRef}
           width={600}
           height={400}
-          className="graph-canvas"
+          className="border-2 border-gray-100 rounded-lg"
         />
       </div>
     </div>
