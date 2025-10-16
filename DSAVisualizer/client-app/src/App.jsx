@@ -48,6 +48,15 @@ function App() {
               >
                 Graph Algorithms
               </button>
+              <button
+                onClick={() => setCurrentPage('trees')}
+                className={`px-3 py-2 rounded-md text-sm font-semibold transition ${currentPage === 'trees'
+                    ? 'text-[#006989] bg-[#A3BAC3]/30'
+                    : 'text-gray-700 hover:text-[#006989]'
+                  }`}
+              >
+                Tree Algorithms
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -81,6 +90,12 @@ function App() {
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
               >
                 Graph Algorithms
+              </button>
+              <button
+                onClick={() => { setCurrentPage('trees'); setMobileMenuOpen(false); }}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Tree Algorithms
               </button>
             </div>
           </div>

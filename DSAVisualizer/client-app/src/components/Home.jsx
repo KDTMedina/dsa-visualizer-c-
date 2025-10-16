@@ -11,6 +11,34 @@ function Home({ setCurrentPage }) {
         </p>
       </div>
 
+      {/* How It Works */}
+      <div className="bg-white rounded-xl shadow-lg p-8">
+        <h2 className="text-3xl font-bold text-center text-[#006989] mb-8">How It Works</h2>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-[#01A7C2] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              1
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Choose Algorithm</h3>
+            <p className="text-gray-600">Select from various sorting or graph algorithms</p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-[#007090] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              2
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Configure Input</h3>
+            <p className="text-gray-600">Enter your data or generate random inputs</p>
+          </div>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-[#006989] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+              3
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Visualize</h3>
+            <p className="text-gray-600">Watch the algorithm execute step-by-step</p>
+          </div>
+        </div>
+      </div>
+
       {/* Feature Cards */}
       <div className="grid md:grid-cols-2 gap-8">
         <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
@@ -82,35 +110,50 @@ function Home({ setCurrentPage }) {
             Explore Graphs
           </button>
         </div>
-      </div>
 
-      {/* How It Works */}
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-[#006989] mb-8">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-[#01A7C2] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-              1
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Choose Algorithm</h3>
-            <p className="text-gray-600">Select from various sorting or graph algorithms</p>
-          </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-[#007090] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-              2
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Configure Input</h3>
-            <p className="text-gray-600">Enter your data or generate random inputs</p>
-          </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-[#006989] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-              3
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Visualize</h3>
-            <p className="text-gray-600">Watch the algorithm execute step-by-step</p>
-          </div>
+        <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+          <h2 className="text-3xl mb-4">🌲 Tree Algorithms</h2>
+          <p className="text-gray-600 mb-4">Explore fundamental tree algorithms and binary search tree operations</p>
+          <ul className="space-y-2 mb-6 text-gray-700">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              In-Order Traversal
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Pre-Order Traversal
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Post-Order Traversal
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Level-Order Traversal
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              BST Search
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              BST Insert
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              BST Delete
+            </li>
+          </ul>
+          <button
+            onClick={() => setCurrentPage('trees')}
+            className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
+          >
+            Explore Trees
+          </button>
         </div>
+
       </div>
+    
     </div>
   );
 }
