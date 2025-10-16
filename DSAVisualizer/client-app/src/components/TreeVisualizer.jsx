@@ -416,7 +416,7 @@ function TreeVisualizer() {
   const needsInput = ['search', 'insert', 'delete'].includes(algorithm);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-6">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-[#006989] mb-8 text-center">
           Tree Algorithm Visualizer

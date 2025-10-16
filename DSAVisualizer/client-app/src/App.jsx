@@ -4,6 +4,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import SortingVisualizer from './components/SortingVisualizer';
 import GraphVisualizer from './components/GraphVisualizer';
 import Home from './components/Home';
+import TreeVisualizer from './components/TreeVisualizer';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -107,6 +108,7 @@ function App() {
         {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
         {currentPage === 'sorting' && <SortingVisualizer />}
         {currentPage === 'graphs' && <GraphVisualizer />}
+        {currentPage === 'trees' && <TreeVisualizer />}
       </main>
 
       {/* Footer */}
