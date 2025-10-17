@@ -1,4 +1,7 @@
-function Home({ setCurrentPage }) {
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function Home() {
   return (
     <div className="space-y-12">
       {/* Hero Section */}
@@ -70,12 +73,12 @@ function Home({ setCurrentPage }) {
               Heap Sort
             </li>
           </ul>
-          <button
-            onClick={() => setCurrentPage('sorting')}
+          <Link
+            to="/sorting" // Updated to use React Router's Link
             className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
           >
             Explore Sorting
-          </button>
+          </Link>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
@@ -103,12 +106,12 @@ function Home({ setCurrentPage }) {
               Topological Sort
             </li>
           </ul>
-          <button
-            onClick={() => setCurrentPage('graphs')}
+          <Link
+            to="/graphs" // Updated to use React Router's Link
             className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
           >
             Explore Graphs
-          </button>
+          </Link>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
@@ -144,16 +147,14 @@ function Home({ setCurrentPage }) {
               BST Delete
             </li>
           </ul>
-          <button
-            onClick={() => setCurrentPage('trees')}
+          <Link
+            to="/trees" // Updated to use React Router's Link
             className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
           >
             Explore Trees
-          </button>
+          </Link>
         </div>
-
       </div>
-    
     </div>
   );
 }
