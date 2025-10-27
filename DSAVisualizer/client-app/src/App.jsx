@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import SortingVisualizer from './components/SortingVisualizer';
 import GraphVisualizer from './components/GraphVisualizer';
 import Home from './components/Home';
 import TreeVisualizer from './components/TreeVisualizer';
+import StackQueueVisualizer from './components/StackQueueVisualizer';
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,6 +47,12 @@ function App() {
                   className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/trees' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
                 >
                   Tree Algorithms
+                </Link>
+                <Link
+                  to="/stacks-queues"
+                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/stacks-queues' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                >
+                  Stacks & Queues
                 </Link>
               </div>
 
@@ -90,6 +97,13 @@ function App() {
                   className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                 >
                   Tree Algorithms
+                </Link>
+                <Link
+                  to="/stacks-queues" // StackQueues link for mobile menu
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  Stacks & Queues
                 </Link>
               </div>
             </div>

@@ -154,6 +154,39 @@ function Home() {
             Explore Trees
           </Link>
         </div>
+
+        <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+          <h2 className="text-3xl mb-4">📚 Stacks & Queues</h2>
+          <p className="text-gray-600 mb-4">Visualize LIFO and FIFO data structures in action</p>
+          <ul className="space-y-2 mb-6 text-gray-700">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Stack (LIFO)
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Queue (FIFO)
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Priority Queue
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Push/Pop Operations
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Enqueue/Dequeue
+            </li>
+          </ul>
+          <Link
+            to="/stacks-queues"
+            className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
+          >
+            Explore Stacks & Queues
+          </Link>
+        </div>
       </div>
     </div>
   );
