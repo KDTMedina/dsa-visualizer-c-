@@ -117,6 +117,7 @@ function App() {
             <Route path="/sorting" element={<SortingVisualizer />} />
             <Route path="/graphs" element={<GraphVisualizer />} />
             <Route path="/trees" element={<TreeVisualizer />} />
+            <Route path="/stacks-queues" element={<StackQueueVisualizer />} />
           </Routes>
         </main>
 
