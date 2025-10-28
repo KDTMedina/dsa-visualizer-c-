@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, NavLink  } from 'react-router-dom';
 import SortingVisualizer from './components/SortingVisualizer';
 import GraphVisualizer from './components/GraphVisualizer';
 import Home from './components/Home';
@@ -24,36 +24,56 @@ function App() {
 
               {/* Desktop Menu */}
               <div className="hidden md:flex space-x-8">
-                <Link
+                <NavLink
                   to="/" // Home link now uses React Router
-                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                  end
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
+                    }`
+                  }
                 >
                   Home
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/sorting" // Sorting link uses React Router
-                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/sorting' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                  end
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
+                    }`
+                  }
                 >
                   Sorting Algorithms
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/graphs" // Graph link uses React Router
-                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/graphs' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                  end
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
+                    }`
+                  }
                 >
                   Graph Algorithms
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/trees" // Trees link uses React Router
-                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/trees' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                  end
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
+                    }`
+                  }
                 >
                   Tree Algorithms
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                   to="/stacks-queues"
-                  className={`px-3 py-2 rounded-md text-sm font-semibold transition ${window.location.pathname === '/stacks-queues' ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'}`}
+                  end
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
+                    }`
+                  }
                 >
                   Stacks & Queues
-                </Link>
+                </NavLink>
               </div>
 
               {/* Mobile Menu Button */}
