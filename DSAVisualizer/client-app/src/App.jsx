@@ -65,7 +65,7 @@ function App() {
                   Tree Algorithms
                 </NavLink>
                 <NavLink
-                  to="/stacks-queues"
+                  to="/stacks-queues" // StacksQueues links uses React Router
                   end
                   className={({ isActive }) =>
                     `px-3 py-2 rounded-md text-sm font-semibold transition ${isActive ? 'text-[#006989] bg-[#A3BAC3]/30' : 'text-gray-700 hover:text-[#006989]'
