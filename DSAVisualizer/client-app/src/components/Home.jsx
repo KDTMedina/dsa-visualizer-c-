@@ -187,6 +187,39 @@ function Home() {
             Explore Stacks & Queues
           </Link>
         </div>
+
+        <div className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition">
+          <h2 className="text-3xl mb-4">🔗 Linked Lists</h2>
+          <p className="text-gray-600 mb-4">Visualize dynamic linear data structures with pointer-based connections</p>
+          <ul className="space-y-2 mb-6 text-gray-700">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Singly Linked List
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Doubly Linked List
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Circular Linked List
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Insert/Delete Operations
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-[#01A7C2] rounded-full"></span>
+              Search & Reverse
+            </li>
+          </ul>
+          <Link
+            to="/linked-lists"
+            className="w-full bg-[#007090] hover:bg-[#006989] text-white font-semibold py-3 px-6 rounded-lg transition"
+          >
+            Explore Linked Lists
+          </Link>
+        </div>
       </div>
     </div>
   );
