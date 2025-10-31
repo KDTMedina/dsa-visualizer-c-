@@ -43,7 +43,7 @@ function App() {
                     }`
                   }
                 >
-                  Sorting Algorithms
+                  Sorting
                 </NavLink>
                 <NavLink
                   to="/graphs" // Graph link uses React Router
@@ -53,7 +53,7 @@ function App() {
                     }`
                   }
                 >
-                  Graph Algorithms
+                  Graph
                 </NavLink>
                 <NavLink
                   to="/trees" // Trees link uses React Router
@@ -63,7 +63,7 @@ function App() {
                     }`
                   }
                 >
-                  Tree Algorithms
+                  Tree
                 </NavLink>
                 <NavLink
                   to="/stacks-queues" // StacksQueues links uses React Router
@@ -113,21 +113,21 @@ function App() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                 >
-                  Sorting Algorithms
+                  Sorting
                 </Link>
                 <Link
                   to="/graphs" // Graph link for mobile menu
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                 >
-                  Graph Algorithms
+                  Graph
                 </Link>
                 <Link
                   to="/trees" // Tree link for mobile menu
                   onClick={() => setMobileMenuOpen(false)}
                   className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
                 >
-                  Tree Algorithms
+                  Tree
                 </Link>
                 <Link
                   to="/stacks-queues" // StackQueues link for mobile menu
